@@ -57,3 +57,17 @@ go run cmd/order/main.go
 ### Passo 7: Consumir e salvar a mensagem no banco de dados
 
 A aplicação Go consumirá a mensagem publicada na fila **_order_** no RabbitMQ e salvará os dados na tabela **_orders_** do banco de dados SQLite.
+
+## Disponibilizar API do projeto
+
+### Passo 1: Gerar imagem Docker
+No terminal no diretório da aplicação, execute o seguinte comando para gerar a imagem Docker:
+```
+docker build -t luizhenriquees/go-order-manager:latest .
+```
+
+### Passo 2: Executar aplicação em container
+No terminal no diretório da aplicação, execute o seguinte comando para rodar aplicação em container Docker:
+```
+docker run -p 8888:8888 luizhenriquees/go-order-manager:latest
+```
