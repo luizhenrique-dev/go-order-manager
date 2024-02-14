@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/devfullcycle/20-CleanArch/internal/entity"
-	"github.com/devfullcycle/20-CleanArch/internal/usecase"
-	"github.com/devfullcycle/20-CleanArch/pkg/events"
+	"github.com/luizhenrique-dev/go-order-manager/internal/entity"
+	"github.com/luizhenrique-dev/go-order-manager/internal/usecase"
+	"github.com/luizhenrique-dev/go-order-manager/pkg/events"
 )
 
 type WebOrderHandler struct {

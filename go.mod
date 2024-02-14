@@ -1,4 +1,4 @@
-module github.com/devfullcycle/20-CleanArch
+module github.com/luizhenrique-dev/go-order-manager
 
 go 1.19
 
