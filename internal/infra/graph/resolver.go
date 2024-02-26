@@ -8,4 +8,5 @@ import "github.com/luizhenrique-dev/go-order-manager/internal/usecase"
 
 type Resolver struct {
 	CreateOrderUseCase usecase.CreateOrderUseCase
+	ListOrderUseCase   usecase.ListOrderUseCase
 }

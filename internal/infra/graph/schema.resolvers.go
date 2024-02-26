@@ -6,9 +6,8 @@ package graph
 
 import (
 	"context"
-
-	"github.com/devfullcycle/20-CleanArch/internal/infra/graph/model"
-	"github.com/devfullcycle/20-CleanArch/internal/usecase"
+	"github.com/luizhenrique-dev/go-order-manager/internal/infra/graph/model"
+	"github.com/luizhenrique-dev/go-order-manager/internal/usecase"
 )
 
 // CreateOrder is the resolver for the createOrder field.
@@ -30,7 +29,29 @@ func (r *mutationResolver) CreateOrder(ctx context.Context, input *model.OrderIn
 	}, nil
 }
 
+// ListOrders is the resolver for the listOrders field.
+func (r *queryResolver) ListOrders(ctx context.Context) ([]*model.Order, error) {
+	orders, err := r.ListOrderUseCase.Execute()
+	if err != nil {
+		return nil, err
+	}
+	var result []*model.Order
+	for _, order := range orders {
+		result = append(result, &model.Order{
+			ID:         order.ID,
+			Price:      float64(order.Price),
+			Tax:        float64(order.Tax),
+			FinalPrice: float64(order.FinalPrice),
+		})
+	}
+	return result, nil
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+
 type mutationResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }
