@@ -32,6 +32,7 @@ func (r *OrderRepository) ListAll() ([]*entity.Order, error) {
 		return nil, err
 	}
 
+	defer rows.Close()
 	var orders []*entity.Order
 	for rows.Next() {
 		var order entity.Order
@@ -46,7 +47,7 @@ func (r *OrderRepository) ListAll() ([]*entity.Order, error) {
 
 func (r *OrderRepository) GetTotal() (int, error) {
 	var total int
-	err := r.Db.QueryRow("Select count(*) from orders").Scan(&total)
+	err := r.Db.QueryRow("SELECT COUNT(*) FROM orders").Scan(&total)
 	if err != nil {
 		return 0, err
 	}
