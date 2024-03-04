@@ -3,12 +3,12 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/luizhenrique-dev/go-order-manager/config"
 	"net"
 	"net/http"
 
 	graphql_handler "github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/luizhenrique-dev/go-order-manager/configs"
 	"github.com/luizhenrique-dev/go-order-manager/internal/event/handler"
 	"github.com/luizhenrique-dev/go-order-manager/internal/infra/graph"
 	"github.com/luizhenrique-dev/go-order-manager/internal/infra/grpc/pb"
@@ -24,7 +24,7 @@ import (
 )
 
 func main() {
-	configs, err := configs.LoadConfig(".")
+	configs, err := config.LoadConfig(".")
 	if err != nil {
 		panic(err)
 	}
@@ -35,6 +35,7 @@ func main() {
 	}
 	defer db.Close()
 
+	config.RunMigrations(configs)
 	rabbitMQChannel := getRabbitMQChannel()
 
 	eventDispatcher := events.NewEventDispatcher()

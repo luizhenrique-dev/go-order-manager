@@ -11,8 +11,10 @@ services:
       MYSQL_PASSWORD: root
     ports:
       - 3306:3306
+    expose:
+      - 3306
     volumes:
-      - .docker/mysql:/var/lib/mysql
+      - /tmp/mysql-data:/var/lib/mysql
 
   rabbitmq:
     image: rabbitmq:3-management
