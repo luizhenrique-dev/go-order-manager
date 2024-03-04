@@ -37,3 +37,21 @@ func (s *OrderService) CreateOrder(ctx context.Context, in *pb.CreateOrderReques
 		FinalPrice: float32(output.FinalPrice),
 	}, nil
 }
+
+func (s *OrderService) ListOrders(ctx context.Context, in *pb.Blank) (*pb.OrderList, error) {
+	output, err := s.ListOrderUseCase.Execute()
+	if err != nil {
+		return nil, err
+	}
+	var orders []*pb.CreateOrderResponse
+	for _, o := range output {
+		order := &pb.CreateOrderResponse{
+			Id:         o.ID,
+			Price:      float32(o.Price),
+			Tax:        float32(o.Tax),
+			FinalPrice: float32(o.FinalPrice),
+		}
+		orders = append(orders, order)
+	}
+	return &pb.OrderList{Orders: orders}, nil
+}
