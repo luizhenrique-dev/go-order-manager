@@ -46,6 +46,7 @@ make run
 ```
 
 - A aplicação estará disponível em [http://localhost:8000](http://localhost:8000).
+- As _migrations_ serão executadas automaticamente no startup da aplicação.
 - O GraphQL Playground estará disponível em [http://localhost:8080](http://localhost:8080).
 - O gRPC server estará disponível em [http://localhost:50051](http://localhost:50051).
 
