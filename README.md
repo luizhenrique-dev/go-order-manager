@@ -1,32 +1,23 @@
 ## Guia de Execução do Projeto
 
-Este guia fornece as instruções para executar o projeto que envolve o uso do SQLite, Docker com RabbitMQ e uma aplicação Go para consumir e salvar mensagens no banco de dados.
+Este guia fornece as instruções para executar o projeto que envolve o uso do MySQL, Docker com RabbitMQ e uma aplicação Go para consumir e salvar mensagens no banco de dados.
 
 ### Pré-requisitos
 
 Antes de começar, certifique-se de ter instalado em seu computador as seguintes ferramentas:
 
 - Docker (com Docker Compose)
-- SQLite3
-- Go (Golang)
+- Go (Golang) 1.21+
 
-### Passo 1: Criar a tabela no banco de dados SQLite
+### Passo 1: Criar o diretório para o banco de dados MySQL
 
-No terminal, execute o comando abaixo para acessar o cliente SQLite no banco de dados **_db.sqlite3_**:
-
-```
-sqlite3 db.sqlite3
-```
-
-### Passo 2: Criar a tabela "orders"
-
-Dentro do cliente SQLite, cole e execute o seguinte comando para criar a tabela **_orders_**:
+No terminal, execute o comando abaixo para criar um diretório onde será armazenado os dados do MySQL:
 
 ```
-CREATE TABLE orders (id varchar(255) not null, price float not null, tax float not null, final_price float not null, primary key (id));
+mkdir /tmp/mysql-data
 ```
 
-### Passo 3: Executar o Docker Compose com o RabbitMQ
+### Passo 2: Executar o Docker Compose com o RabbitMQ
 
 Certifique-se de que o Docker esteja instalado e em execução. No mesmo terminal, navegue até o diretório onde está localizado o arquivo **_docker-compose.yml_** e execute o seguinte comando para iniciar o RabbitMQ em um container:
 
@@ -34,11 +25,11 @@ Certifique-se de que o Docker esteja instalado e em execução. No mesmo termina
 docker-compose up -d
 ```
 
-### Passo 4: Configurar a queue "order" no RabbitMQ
+### Passo 3: Configurar a queue "order" no RabbitMQ
 
 Abra um navegador e acesse a interface web do RabbitMQ em `http://localhost:15672` (login: guest, senha: guest). Crie uma nova fila chamada **_order_**.
 
-### Passo 5: Publicar uma mensagem na queue "order"
+### Passo 4: Publicar uma mensagem na queue "order"
 
 Utilizando a interface web do RabbitMQ, acesse a aba **_Publish message_** da fila **_order_** e publique a seguinte mensagem no formato _JSON_:
 
@@ -46,15 +37,19 @@ Utilizando a interface web do RabbitMQ, acesse a aba **_Publish message_** da fi
 {"id":"3","price":13.0,"tax":0.3}
 ```
 
-### Passo 6: Executar a aplicação Go
+### Passo 5: Executar a aplicação Go
 
-No mesmo terminal, navegue até o diretório onde se encontra o arquivo "main.go" da aplicação Go. Em seguida, execute o seguinte comando para rodar a aplicação:
+No mesmo terminal, execute:
 
 ```
-go run cmd/order/main.go
+make run
 ```
 
-### Passo 7: Consumir e salvar a mensagem no banco de dados
+- A aplicação estará disponível em [http://localhost:8000](http://localhost:8000).
+- O GraphQL Playground estará disponível em [http://localhost:8080](http://localhost:8080).
+- O gRPC server estará disponível em [http://localhost:50051](http://localhost:50051).
+
+### Passo 6: Consumir e salvar a mensagem no banco de dados
 
 A aplicação Go consumirá a mensagem publicada na fila **_order_** no RabbitMQ e salvará os dados na tabela **_orders_** do banco de dados SQLite.
 
@@ -63,11 +58,11 @@ A aplicação Go consumirá a mensagem publicada na fila **_order_** no RabbitMQ
 ### Passo 1: Gerar imagem Docker
 No terminal no diretório da aplicação, execute o seguinte comando para gerar a imagem Docker:
 ```
-docker build -t luizhenriquees/go-order-manager:latest .
+make docker-build
 ```
 
 ### Passo 2: Executar aplicação em container
 No terminal no diretório da aplicação, execute o seguinte comando para rodar aplicação em container Docker:
 ```
-docker run -p 8888:8888 luizhenriquees/go-order-manager:latest
+make docker-run
 ```
